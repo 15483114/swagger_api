@@ -4,6 +4,7 @@ from loguru import logger
 from service.constants import mensagens
 import pandas as pd
 import numpy as np
+import requests
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
@@ -43,6 +44,11 @@ class SentimentosService():
                      "listaClassificacoes": json.loads(df_response.to_json(
                                                                             orient='records', force_ascii=False))}
 
+        return response
+
+    def buscar_endereco(self,texts):
+        cep = texts['textoMensagem']
+        response = requests.get('http://viacep.com.br/ws/'+cep[0]+'/json/')
         return response
 
     def buscar_predicao(self, texts):

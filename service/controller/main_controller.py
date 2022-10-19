@@ -6,6 +6,7 @@ from service.service.main_service import SentimentosService
 from service.restplus import api, objResponse
 from service.constants import mensagens, codeHttp
 from service.util import doc_swagger
+import requests
 
 pa = api.namespace("")
 
@@ -17,8 +18,9 @@ class MainService(Resource):
         try:
             dados_request = request.get_json()
             main_service = SentimentosService()
-            resp = main_service.executar_rest(dados_request)
-            response = objResponse.send_success(data=resp, messages=mensagens.SUCESSO_PREDICT, status=codeHttp.SUCCESS_200)
+            resp = main_service.buscar_endereco(dados_request)
+
+            response = objResponse.send_success(data=resp.json(), messages=mensagens.SUCESSO_PREDICT, status=codeHttp.SUCCESS_200)
 
         except OSError as error:
             response = objResponse.send_exception(objError=error, messages=mensagens.ERROR_OS, status=codeHttp.ERROR_500)
